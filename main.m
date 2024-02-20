@@ -6,7 +6,6 @@ tic
 % add directories
 addpath("src");
 addpath("test");
-addpath("src\matpower7.1")
 
 % MATPOWER Options
 mpopt=mpoption('verbose',0,'out.all','0');
