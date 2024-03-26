@@ -27,7 +27,7 @@ AA = sdpvar(BUS_N,1);
   B_EX= [1:BUS_N]';
   for j=1:length(P_OVR)
         AB= G(mpc_2.branch(ID_congestions(j),2)).down;
-        %B_EX= setdiff(B_EX,AB);
+        B_EX= setdiff(B_EX,AB);
         RISS2= AA(AB) ./ Nq_BUS(AB) .* F(AB) ./ 100 .* P_LOAD_NOMINALI(AB)';
         if sum( F(AB) ./ 100 .* P_LOAD_NOMINALI(AB)' ) >= abs(P_OVR(j))
            F3=[ F3 ;  sum(RISS2) >= abs(P_OVR(j)) ];

@@ -28,6 +28,6 @@ Nq = [5, 7, 11]; % numero di "prese" dei carichi per quantile
 [OVf, OVt, OVm, P_OVR] = congestion_calc(mpc, KC, mpopt, F, G, Nq); %%% CONGESTION ANALYSIS WITH IDEAL MEASUREMENTS 
 [ideal_solution, B_IN] = congestion_opt(mpc, KC, F, G, OVm, P_OVR, Nq); %%%%%% OTTIMIZZAZIONE  
 [CONGESTIONS] = lf_final(mpc, ideal_solution, F, mpopt, KC, Nq); %%% LOAD FLOW FINALE 
-res_show(mpc, F, B_IN, OVm, KC, P_OVR, Nq); %Show Results
+res_show(mpc, F, B_IN, OVm, KC, P_OVR, Nq, ideal_solution); %Show Results
 
 toc

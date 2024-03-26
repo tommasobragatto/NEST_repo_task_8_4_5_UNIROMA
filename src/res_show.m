@@ -1,4 +1,4 @@
-function[]=res_show(mpc, F, B_IN, OVm, KC, P_OVR, Nq)  
+function[]=res_show(mpc, F, B_IN, OVm, KC, P_OVR, Nq,ideal_solution)  
 mpc.branch= mpc.branch(find(mpc.branch(:,11)==1),:); %%% remove branch out of service
 BUS_N= length(mpc.bus(:,1)); % non da impostare
 
@@ -16,14 +16,19 @@ Nq_BUS(find(P_LOAD_NOMINALI > q_load(2)),1)= Nq(3);
 
 figure
   G88=graph(mpc.branch(ismember(mpc.branch(:,11),1),1),mpc.branch(ismember(mpc.branch(:,11),1),2));
-  H88= plot(G88,'NodeLabel',mpc.bus(:,1),'Layout','force');%,'NodeLabel',mpc.bus(:,1),'Layout','force');
+  H88= plot(G88,'NodeLabel',mpc.bus(:,1),'Layout','layered');%,'NodeLabel',mpc.bus(:,1),'Layout','force');
   title('CONGESTIONS ANALYSIS WITH IDEAL MEASUREMENTS','Fontsize',20);
 
+
+  AA = ideal_solution;
+
+  highlight(H88,mpc.bus(:,1),'NodeLabelColor','white','NodeFontSize',0.1);
+
+
   for s=1:length(B_IN)
-   
          labelnode(H88,B_IN(s), B_IN(s) + " // " + round( 1000 .* AA(B_IN(s)) ./ Nq_BUS(B_IN(s)) .* F(B_IN(s)) ./100 .* P_LOAD_NOMINALI(B_IN(s))') + " kW" )
          if 1000 .* AA(B_IN(s)) ./ Nq_BUS(B_IN(s)) .* F(B_IN(s)) ./100 .* P_LOAD_NOMINALI(B_IN(s))' ~= 0
-              highlight(H88,B_IN(s),'NodeFontSize',14,'NodeLabelColor','g','NodeColor','g','MarkerSize',7);
+              highlight(H88,B_IN(s),'NodeFontSize',8,'NodeLabelColor','black','NodeColor','black','MarkerSize',5);
          end
   end
 
@@ -31,9 +36,9 @@ figure
 
   for k= 1:length(ID_congestions)
          labeledge(H88,mpc.branch(ID_congestions(k),1),mpc.branch(ID_congestions(k),2), " // " + round( P_OVR(k).*1000) + " kW" );
-         highlight(H88,mpc.branch(ID_congestions(k),1),mpc.branch(ID_congestions(k),2),'EdgeFontSize',14,'EdgeLabelColor','r','EdgeColor','r');
+         highlight(H88,mpc.branch(ID_congestions(k),1),mpc.branch(ID_congestions(k),2),'EdgeFontSize',8,'EdgeLabelColor','r','EdgeColor','r');
   end
-  txt = 'I rami rossi sono i rami congestionati; i nodi verdi sono i nodi dove è stata richiesta la flessibilità';
+  txt = 'The red branches are overloaded whilst the black nodes are involved in the dispatching operation';
   text(-5,-5,txt)
 
 end
